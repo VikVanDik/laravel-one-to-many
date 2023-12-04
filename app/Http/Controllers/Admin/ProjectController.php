@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Project;
 use App\Http\Controllers\Controller;
 use App\Models\Type;
+use App\Models\Technology;
+use App\Http\Requests\ProjectRequest;
 
 use Illuminate\Http\Request;
 
@@ -34,8 +36,8 @@ class ProjectController extends Controller
         $project = null;
         $button = "Crea";
         $types = Type::all();
-
-        return view('admin.projects.create', compact('title', 'method', 'route', 'project', 'button', 'types'));
+        $technologies = Technology::all();
+        return view('admin.projects.create', compact('title', 'method', 'route', 'project', 'button', 'types', 'technologies'));
     }
 
     /**
@@ -44,9 +46,8 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
-
 
         $form_data = $request->all();
 
@@ -56,9 +57,15 @@ class ProjectController extends Controller
 
         $new_project->type_id = $form_data['type'];
 
+        $new_project->image = $form_data['image'];
+
         $new_project->fill($form_data);
 
         $new_project->save();
+
+        if(array_key_exists('technologies', $form_data)){
+            $new_project->technology()->attach($form_data['technologies']);
+        }
 
         return redirect()->route('admin.projects.index');
 
@@ -100,7 +107,7 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
 
         $form_data = $request->all();

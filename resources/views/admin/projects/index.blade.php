@@ -16,6 +16,8 @@
         <th scope="col">Data</th>
         <th scope="col">Azioni</th>
         <th scope="col">Tipo</th>
+        <th scope="col">Tecnologia</th>
+
       </tr>
     </thead>
     <tbody>
@@ -38,6 +40,12 @@
                     </form>
                 </td>
                 <td>{{$project->type?->name ?? '-'}}</td>
+                <td>@forelse ($project->technology as $technology)
+                    {{$technology->name}}
+                @empty
+                    -
+                @endforelse
+                </td>
             </tr>
 
         @endforeach

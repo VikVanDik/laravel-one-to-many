@@ -26,7 +26,6 @@ class ProjectsSeeder extends Seeder
         $new_project->name = $faker->name;
         $new_project->creation = $faker->date();
         $new_project->slug = Project::generateSlug($new_project->name);
-        $new_project->technology = $faker->word;
         $new_project->url = $faker->url;
         $new_project->description = $faker->paragraph;
         $new_project->save();
